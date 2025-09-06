@@ -3,7 +3,7 @@ from datetime import datetime
 import csv
 import os
 
-API_KEY = "bf09c3306fec22e396ee9db9afb9181e"
+API_KEY = "your_api_key_here"
 HEADERS = ["City", "Temperature (C)", "Weather Description","Humidity", "Wind Speed", "Date", "Time"]
 searched_cities_data = []
 FILE = "my-weather-details.csv"
@@ -37,15 +37,19 @@ def get_weather_data(city):
 
 # Function to write weather data to csv file
 def write_to_csv(data):
-    if (os.path.exists(FILE)):
-        with open(FILE, 'a', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerows(data)
-    else:
-        with open(FILE, 'w') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(HEADERS)
-            writer.writerows(data)
+    try:
+        if (os.path.exists(FILE)):
+            with open(FILE, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerows(data)
+        else:
+            with open(FILE, 'w') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow(HEADERS)
+                writer.writerows(data)
+        print('weather data saved successfully!')
+    except:
+        print('weather data failed to save')
 
     
 
