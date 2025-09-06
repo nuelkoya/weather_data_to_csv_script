@@ -1,10 +1,14 @@
 import requests
 from datetime import datetime
+import csv
+import os
 
 API_KEY = "bf09c3306fec22e396ee9db9afb9181e"
 HEADERS = ["City", "Temperature (C)", "Weather Description","Humidity", "Wind Speed", "Date", "Time"]
 searched_cities_data = []
+FILE = "my-weather-details.csv"
 
+# Function to get weather data for user inputted city from API
 def get_weather_data(city):
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
     try:
@@ -29,6 +33,20 @@ def get_weather_data(city):
             return city_data
     except requests.exceptions.RequestException as error:
         print(f'Error: {error}')
+
+
+# Function to write weather data to csv file
+def write_to_csv(data):
+    if (os.path.exists(FILE)):
+        with open(FILE, 'a', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(data)
+    else:
+        with open(FILE, 'w') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(HEADERS)
+            writer.writerows(data)
+
     
 
 def main():
@@ -36,7 +54,7 @@ def main():
         city = input('Enter a city: ')
         input_city_data = get_weather_data(city)
         if input_city_data:
-            print(input_city_data)
+            write_to_csv(input_city_data)
             break
         else:
             print('Something went wrong! Make sure you entered the right city name')
